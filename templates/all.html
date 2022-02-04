@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{%block content%}
+{%if tasks.existing|length != 0%}
+{%for task in tasks.existing %}
+<div class="text-lg px-2 flex justify-between">
+    <div>{{forloop.counter}}.{{task}}</div>
+    <div>
+        <a href="/delete-task/{{forloop.counter}}" class="text-red-600 underline">delete</a>
+        |
+        <a href="/complete_task/{{forloop.counter}}" class="text-green-500 underline">done</a>
+    </div>
+</div>
+{%endfor%}
+{%else%}
+<h1>No existing tasks</h1>
+{%endif%}
+{%if tasks.completed|length != 0%}
+<h1 class="text-xl">Completed task:</h1>
+{%for task in tasks.completed %}
+<div class="text-lg px-2 flex justify-between">
+    <div>{{forloop.counter}}.{{task}}</div>
+</div>
+{%endfor%}
+{%else%}
+<h1>No tasks completed yet</h1>
+{%endif%}
+{%endblock%}

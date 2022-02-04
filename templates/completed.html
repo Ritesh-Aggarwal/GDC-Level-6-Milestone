@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{%block content%}
+{%if tasks|length != 0%}
+<h1 class="text-xl">Completed task:</h1>
+{%for task in tasks %}
+<div class="text-lg px-2 flex justify-between">
+    <div>{{forloop.counter}}.{{task}}</div>
+</div>
+{%endfor%}
+{%else%}
+<h1>No tasks completed yet</h1>
+{%endif%}
+
+{%endblock%}

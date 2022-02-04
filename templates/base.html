@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+        integrity="sha512-wnea99uKIC3TJF7v4eKk4Y+lMz2Mklv18+r4na2Gn1abDRPPOeef95xTzdwGD9e6zXJBteMIhZ1+68QC5byJZw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Task manager</title>
+</head>
+
+<body>
+    <div class="flex border-2 p-4 h-screen align-items-center justify-center bg-gray-100">
+        <div
+            class="p-4 border w-1/2 rounded-lg shadow-md bg-white flex flex-col justify-between divide-y divide-purple-600">
+            <div class="divide-y divide-gray-400">
+                <div class="text-center text-2xl">Task manager app</div>
+                {%block content%}{%endblock%}
+            </div>
+            <div class="flex justify-between text-purple-400">
+                <a href="/tasks">view existing tasks</a>
+                <a href="/completed_tasks">view complete tasks</a>
+                <a href="/all_tasks">view all tasks</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
