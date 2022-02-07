@@ -1,14 +1,42 @@
 {% extends "base.html" %}
 {%block content%}
-{%if tasks|length != 0%}
-<h1 class="text-xl">Completed task:</h1>
-{%for task in tasks %}
-<div class="text-lg px-2 flex justify-between">
-    <div>{{forloop.counter}}.{{task}}</div>
+<div class="flex justify-between">
+    <div class="text-center text-3xl font-bold">Hi {{request.user}}</div>
+    <div>
+        <form action="/user/logout/" method="post">
+            {%csrf_token%}
+            <button type="submit" class="text-red-500 font-semibold">Log out</button>
+        </form>
+    </div>
 </div>
-{%endfor%}
-{%else%}
-<h1>No tasks completed yet</h1>
-{%endif%}
+<div class="flex justify-evenly my-4">
+    <a href="/all_tasks" class="px-4 py-1">All</a>
+    <a href="/tasks" class="px-4 py-1">Pending</a>
+    <a href="/completed_tasks" class="text-red-500 bg-red-200 px-4 py-1 rounded-full">Completed</a>
+</div>
+<div class="flex flex-col flex-1">
 
+    {%if tasks|length != 0%}
+    {%for task in tasks %}
+    <div class="rounded-lg my-2 bg-gray-100 flex justify-between p-4 items-center">
+        <a href="/task-details/{{task.id}}" class="leading-tight">
+            <div class="font-semibold line-through text-red-500">{{task.title}}</div>
+            <span class="text-gray-600">{{task.pretty_date}}</span>
+        </a>
+        <div class="flex">
+            <a href="/update-tasks/{{task.id}}"
+                class="leading-8 h-8 w-8 bg-green-400 rounded-md mr-2 text-center">✏️</a>
+            <a href=" /delete-task/{{task.id}}" class="leading-8 h-8 w-8 bg-red-500 rounded-md text-center">🗑️</a>
+        </div>
+    </div>
+    {%endfor%}
+    {%endif%}
+</div>
+<div class="flex justify-around">
+    {%for page in paginator.page_range%}
+    <a href="?page={{page}}&search={{request.GET.search}}" class="px-4 py-2 rounded-full text-white bg-purple-300 my-2">
+        {{page}}
+    </a>
+    {%endfor%}
+</div>
 {%endblock%}

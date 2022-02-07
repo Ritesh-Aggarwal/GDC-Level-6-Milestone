@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{%block content%}
+<div class="font-semibold text-xl">
+    {{object.title}}
+</div>
+<div class="my-4 p-4 bg-gray-100 rounded-lg">
+    {{object.description}}
+</div>
+<div class="">Priority : {{object.priority}}</div>
+<div>
+    {{object.created_date}}
+</div>
+{%endblock%}

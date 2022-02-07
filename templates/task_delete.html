@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{%block content%}
+<form method="post">{%csrf_token%}
+    <p>Are you sure you want to delete task "<span class="font-semibold">{{object}}</span>" ?</p>
+    <input class="border bg-red-400 text-white rounded-md cursor-pointer hover:shadow-md mt-4 p-2" type="submit"
+        value="Confirm">
+</form>
+{%endblock%}

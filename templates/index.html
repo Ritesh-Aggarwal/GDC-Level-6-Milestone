@@ -1,33 +1,57 @@
 {% extends "base.html" %}
 {%block content%}
-<div class="py-2">
-    <form method="GET">
-        <input type="text" placeholder="search" name="search" class="ring-2 rounded-md p-2">
-        <button type="submit"
-            class="bg-purple-600 border border-purple-600 text-white p-2 rounded-md hover:text-purple-600 hover:bg-white">search</button>
-    </form>
-</div>
-<div class="py-2">
-    <form action="/add-task" method="GET">
-        <input type="text" placeholder="Add task" name="task" class="ring-2 rounded-md p-2">
-        <button type="submit"
-            class="bg-purple-600 border border-purple-600 text-white p-2 rounded-md hover:text-purple-600 hover:bg-white">Add</button>
-    </form>
-</div>
-{%for task in tasks %}
-<div class="text-lg px-2 flex justify-between">
-    <div>{{forloop.counter}}.{{task.title}}</div>
+<div class="flex justify-between">
+    <div class="text-center text-3xl font-bold">Hi {{request.user}}</div>
     <div>
-        <a href="/delete-task/{{task.id}}" class="text-red-600 underline">delete</a>
-        |
-        <a href="/complete_task/{{task.id}}" class="text-green-500 underline">done</a>
+        <form action="/user/logout/" method="post">
+            {%csrf_token%}
+            <button type="submit" class="text-red-500 font-semibold">Log out</button>
+        </form>
     </div>
 </div>
-{%endfor%}
-<div class="flex justify-around">
+<div class="flex justify-evenly font-semibold my-4">
+    <a href="/all_tasks" class="px-4 py-1">All</a>
+    <a href="/tasks" class="text-green-500 bg-green-200 px-4 py-1 rounded-full">Pending</a>
+    <a href="/completed_tasks" class="px-4 py-1">Completed</a>
+</div>
+<div class="mb-2">
+    <form method="GET" class="flex">
+        <input type="text" placeholder="Search" name="search"
+            class="bg-gray-200 rounded-l-md p-1 px-2 focus:outline-none focus:ring-2  w-2/3">
+        <button type="submit"
+            class="w-1/3 bg-purple-500 border border-purple-600 text-white mx-0 p-1 rounded-r-md hover:bg-purple-400 transition ease-in-out duration-300">Search🔍</button>
+    </form>
+</div>
+<div class="flex flex-1 flex-col">
+    {%for task in tasks %}
+    <div class="rounded-lg my-2 bg-gray-100 flex justify-between p-4 items-center">
+        <div class="flex">
+            <form action="/complete_task/" method="post">
+                {%csrf_token%}
+                <input type="hidden" name="task_id" value="{{task.id}}">
+                <button class="leading-8 h-8 w-8 text-3xl rounded-md mr-2 text-center" type="submit">✅</button>
+            </form>
+            <a href="/task-details/{{task.id}}" class="ml-2 leading-tight">
+                <div class="font-semibold">{{task.title}}</div>
+                <span class="text-gray-600">{{task.pretty_date}}</span>
+            </a>
+        </div>
+        <div class="flex items-center">
 
+            <a href="/update-tasks/{{task.id}}"
+                class="leading-8 h-8 w-8 bg-green-400 rounded-md mr-2 text-center">✏️</a>
+            <a href=" /delete-task/{{task.id}}" class="leading-8 h-8 w-8 bg-red-500 rounded-md text-center">🗑️</a>
+        </div>
+    </div>
+    <!-- <a href="/complete_task/{{task.id}}" class="text-green-500 underline">done</a> -->
+    {%endfor%}
+</div>
+<a href="/create-tasks/"
+    class="text-center bg-red-500 text-white w-full rounded-md py-2 hover:bg-red-400 transition ease-in-out duration-300">
+    Add</a>
+<div class="flex justify-around">
     {%for page in paginator.page_range%}
-    <a href="?page={{page}}&search={{request.GET.search}}" class="text-blue-600 underline my-2">
+    <a href="?page={{page}}&search={{request.GET.search}}" class="px-4 py-2 rounded-full text-white bg-purple-300 my-2">
         {{page}}
     </a>
     {%endfor%}

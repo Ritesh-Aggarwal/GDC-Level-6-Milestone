@@ -14,23 +14,25 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth.views import LogoutView
 from django.urls import path
-from tasks.views import (
-    GenericListView,
-    add_task_view,
-    all_tasks_view,
-    complete_task_view,
-    completed_task_view,
-    delete_task_view,
-    index,
-)
+from tasks.views import (GenericAllTaskView, GenericCompleteTaskView,
+                         GenericCompleteView, GenericListView,
+                         GenericTaskCreateView, GenericTaskDeleteView,
+                         GenericTaskDetailView, GenericTaskUpdateView,
+                         UserCreateView, UserLoginView)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("user/signup", UserCreateView.as_view()),
+    path("user/login", UserLoginView.as_view()),
+    path("user/logout/", LogoutView.as_view()),
     path("tasks/", GenericListView.as_view()),
-    path("add-task/", add_task_view),
-    path("delete-task/<int:index>/", delete_task_view),
-    path("complete_task/<int:index>/", complete_task_view),
-    path("completed_tasks/", completed_task_view),
-    path("all_tasks/", all_tasks_view),
+    path("create-tasks/", GenericTaskCreateView.as_view()),
+    path("update-tasks/<pk>", GenericTaskUpdateView.as_view()),
+    path("task-details/<pk>", GenericTaskDetailView.as_view()),
+    path("delete-task/<pk>", GenericTaskDeleteView.as_view()),
+    path("completed_tasks/", GenericCompleteTaskView.as_view()),
+    path("all_tasks/", GenericAllTaskView.as_view()),
+    path("complete_task/", GenericCompleteView.as_view()),
 ]
