@@ -11,7 +11,7 @@ class Task(models.Model):
     created_date = models.DateTimeField(auto_now=True)
     deleted = models.BooleanField(default=False)
     user = models.ForeignKey(User , on_delete=models.CASCADE , null=True,blank=True)
-    priority = models.IntegerField(default=-1)
+    priority = models.IntegerField(default=0)
 
     def pretty_date(self):
         return self.created_date.strftime("%a %d %b")
