@@ -38,12 +38,12 @@ class TaskCreateForm(ModelForm):
     # UPDATES:using select_for_update to lock rows to avoid concurrency issue
             # using bulk_update to reduce queries
             # instead of iterating though and then checking equality , check if a equal already exist and then iterate
-            # check if same priority exists 
-    def cascadePriority(self,user,priority):
+            # check if same priority exists
+    def cascade_priority(self,user,priority):
         if Task.objects.filter(deleted=False,completed=False,user=user,priority=priority).exists():
             updateSet = []
             p = priority
-            parseDB = Task.objects.select_for_update().filter(deleted=False,completed=False,user=user,priority__gte=priority).order_by('priority','-created_date')
+            parseDB = Task.objects.select_for_update().filter(deleted=False,completed=False,user=user,priority__gte=priority).order_by('priority')
             with transaction.atomic():
                 for task in parseDB:
                     if task.priority == p:

@@ -39,7 +39,7 @@ class GenericTaskCreateView(AuthorizeLoginUser,CreateView):
     def form_valid(self, form):
         user = self.request.user
         priority =  form.cleaned_data.get("priority")
-        form.cascadePriority(user,priority)        
+        form.cascade_priority(user,priority)        
         self.object = form.save()
         self.object.user = self.request.user
         self.object.save()
@@ -57,7 +57,8 @@ class GenericTaskUpdateView(AuthorizeLoginUser,UpdateView):
     def form_valid(self, form):
         user = self.request.user
         priority =  form.cleaned_data.get("priority")
-        form.cascadePriority(user,priority)        
+        if form['priority'].initial != priority:
+            form.cascade_priority(user,priority)     
         self.object = form.save()
         self.object.user = self.request.user
         self.object.save()
@@ -83,9 +84,9 @@ class GenericListView(LoginRequiredMixin,ListView):
 
     def get_queryset(self):
         search_term = self.request.GET.get("search")
-        tasks = Task.objects.filter(deleted=False, completed=False,user=self.request.user).order_by('priority','-created_date')
+        tasks = Task.objects.filter(deleted=False, completed=False,user=self.request.user).order_by('priority')
         if search_term:
-            tasks = tasks.filter(title__icontains=search_term).order_by('priority','-created_date')
+            tasks = tasks.filter(title__icontains=search_term).order_by('priority')
         return tasks
 
 # View for viewing all task
