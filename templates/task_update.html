@@ -32,6 +32,19 @@
                 </ol>
                 {%endif%}
             </div>
+            <div class="flex mb-2 items-center">
+                <span class="mr-2">Status</span>
+                {{form.status}}
+                {%if form.status.errors%}
+                <ol class="list-disc ml-6 text-sm text-red-500">
+                    {%for error in form.status.errors %}
+                    <li>
+                        {{error|escape}}
+                    </li>
+                    {%endfor%}
+                </ol>
+                {%endif%}
+            </div>
             <div class="">
                 <div class="flex mb-2 items-center">
                     <span class="mb-2 mr-2">Priority</span>

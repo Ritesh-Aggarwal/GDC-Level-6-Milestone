@@ -54,7 +54,7 @@ class TaskCreateForm(ModelForm):
 
     class Meta:
         model = Task
-        fields = ['title','description','priority','completed']
+        fields = ['title','description','priority','completed','status']
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -16,11 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import path
+from tasks.apiviews import TaskViewSet
 from tasks.views import (GenericAllTaskView, GenericCompleteTaskView,
                          GenericCompleteView, GenericListView,
                          GenericTaskCreateView, GenericTaskDeleteView,
                          GenericTaskDetailView, GenericTaskUpdateView,
                          UserCreateView, UserLoginView)
+from rest_framework import routers
+router = routers.SimpleRouter()
+
+router.register("api",TaskViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -35,4 +40,4 @@ urlpatterns = [
     path("completed_tasks/", GenericCompleteTaskView.as_view()),
     path("all_tasks/", GenericAllTaskView.as_view()),
     path("complete_task/", GenericCompleteView.as_view()),
-]
+] + router.urls
