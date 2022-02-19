@@ -118,6 +118,6 @@ class GenericCompleteView(AuthorizeLoginUser,View):
 
     def post(self,request):
         task_id = request.POST.get('task_id')
-        task = Task.objects.filter(pk=task_id).update(completed=True)
+        task = Task.objects.filter(pk=task_id).update(completed=True,status='COMPLETED')
         return HttpResponseRedirect("/tasks/")
 
