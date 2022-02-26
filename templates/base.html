@@ -14,7 +14,11 @@
 <body>
     <div class="flex border-2 p-4 h-screen align-items-center justify-center bg-gray-100">
         <div class="p-4 border sm:w-1/3  w-full rounded-lg shadow-md bg-white flex flex-col">
+            {% load tz %}
+            {% get_current_timezone as tz %}
+            {% timezone tz %}
             {%block content%}{%endblock%}
+            {% endtimezone %}
         </div>
     </div>
 </body>

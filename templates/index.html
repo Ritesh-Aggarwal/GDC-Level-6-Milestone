@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 {%block content%}
 <div class="flex justify-between">
-    <div class="text-center text-3xl font-bold">Hi {{request.user}}</div>
+    <div class="flex flex-row items-center">
+        <a href="/report-settings/" class="text-2xl">⚙️</a>
+        <div class="text-center text-3xl font-bold">Hi {{request.user}}</div>
+    </div>
     <div>
         <form action="/user/logout/" method="post">
             {%csrf_token%}

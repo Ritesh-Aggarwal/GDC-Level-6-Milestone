@@ -1,6 +1,7 @@
 
 from django.contrib.auth.models import User
 from django.db import models
+from datetime import datetime, timedelta
 
 STATUS_CHOICES = (
     ("PENDING", "PENDING"),
@@ -8,7 +9,6 @@ STATUS_CHOICES = (
     ("COMPLETED", "COMPLETED"),
     ("CANCELLED", "CANCELLED"),
 )
-
 
 
 class History(models.Model):
@@ -54,3 +54,16 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title
+
+def default_start_time():
+    now = datetime.now()
+    start = now.replace(hour=20, minute=0, second=0, microsecond=0)
+    return start
+
+class ReportSchedule(models.Model):
+    user = models.OneToOneField(User , on_delete=models.CASCADE, null=True,blank=True)
+    report_at = models.TimeField(default=default_start_time)
+    email = models.EmailField(max_length=254)
+
+    def __str__(self) :
+        return f"{self.user} at {self.report_at} to {self.email}"

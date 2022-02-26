@@ -20,7 +20,7 @@ from tasks.apiviews import HistoryViewSet, TaskViewSet
 from tasks.views import (GenericAllTaskView, GenericCompleteTaskView,
                          GenericCompleteView, GenericListView,
                          GenericTaskCreateView, GenericTaskDeleteView,
-                         GenericTaskDetailView, GenericTaskUpdateView,
+                         GenericTaskDetailView, GenericTaskUpdateView, UpdateReportSchedule,
                          UserCreateView, UserLoginView)
 # from rest_framework import routers
 from rest_framework_nested import routers
@@ -52,4 +52,5 @@ urlpatterns = [
     path("completed_tasks/", GenericCompleteTaskView.as_view()),
     path("all_tasks/", GenericAllTaskView.as_view()),
     path("complete_task/", GenericCompleteView.as_view()),
+    path("report-settings/",UpdateReportSchedule.as_view())
 ] + router.urls + api_router.urls

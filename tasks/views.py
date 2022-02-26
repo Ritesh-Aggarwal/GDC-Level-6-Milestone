@@ -5,22 +5,40 @@ from django.views import View
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.list import ListView
+from django.contrib.auth.models import User
 
-from tasks.forms import CustomLoginForm, CustomUserCreationForm, TaskCreateForm
-from tasks.models import Task
+from tasks.forms import CustomLoginForm, CustomUserCreationForm, TaskCreateForm,ReportScheduleForm
+from tasks.models import Task,ReportSchedule
 
-
-# custom class to allow only logged in users and define the queryest accordingly
+#custom class to allow only logged in users and define the queryest accordingly
 class AuthorizeLoginUser(LoginRequiredMixin):
     def get_queryset(self):
-        tasks = Task.objects.filter(deleted=False,user=self.request.user) 
+        tasks = Task.objects.filter(deleted=False,user=self.request.user)
         return tasks
+
+class UpdateReportSchedule(AuthorizeLoginUser,UpdateView):
+    form_class = ReportScheduleForm
+    template_name = "report_update.html"
+    success_url = "/tasks"
+
+    def get_object(self):
+        report_schedule = ReportSchedule.objects.get(user=self.request.user)
+        print(report_schedule)
+        return report_schedule
+
 
 #signup view
 class UserCreateView(CreateView):
     form_class = CustomUserCreationForm
     template_name = "user_create.html"
     success_url = "/user/login"
+
+    def form_valid(self, form):
+        self.object = form.save()
+        user = self.object
+        rep = ReportSchedule.objects.create(user=user)
+        print(user,rep)
+        return HttpResponseRedirect(self.get_success_url())
 
 
 #login view

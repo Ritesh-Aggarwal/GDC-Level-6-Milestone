@@ -1,8 +1,20 @@
+import email
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.db import transaction
 from django.forms import ModelForm, ValidationError
 
-from tasks.models import Task
+from tasks.models import Task,ReportSchedule
+
+class ReportScheduleForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].required = True
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = ' bg-gray-100 rounded-lg p-2'
+
+    class Meta:
+        model = ReportSchedule
+        fields = ['email','report_at']
 
 
 # custom login form class inheriting from AuthenticationForm and add css classes to field using constructor
@@ -14,6 +26,7 @@ class CustomLoginForm(AuthenticationForm):
 
 # custom signup form class inheriting from UserCreationForm and add css classes to field using constructor
 class CustomUserCreationForm(UserCreationForm):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields:
