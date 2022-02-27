@@ -9,19 +9,18 @@ from django.db.models import Count
 from tasks.models import ReportSchedule, Task
 
 
-@periodic_task(run_every=timedelta(seconds=60))
+@periodic_task(run_every=timedelta(seconds=30))
 def send_scheduled_emails():
-    reports = ReportSchedule.objects.all()
+    print("send scheduled emails")
+    reports = ReportSchedule.objects.filter(report_at__contains=datetime.now().strftime("%H:%M")).exclude(email='')
     for report in reports:
-        if report.email:
-            pending_tasks = Task.objects.filter(user=report.user,completed=False,deleted=False).values('status').annotate(total=Count('status')).order_by('total')
-            email_content = f"Hey {report.user}, here is your daily report:\n"
-            for status in pending_tasks:
-                email_content += f"Task {status['status']} : {status['total']}\n"
-            check_time = str(report.report_at)[:-3]==str(datetime.now().strftime("%H:%M"))
-            if check_time:
-                send_mail("Pending tasks from Tasks Manager",email_content,"eg@eg.com",{report.email})
-                print(f"Email sent to {report.user.id}")
+        print(report)
+        pending_tasks = Task.objects.filter(user=report.user,completed=False,deleted=False).values('status').annotate(total=Count('status')).order_by('total')
+        email_content = f"Hey {report.user}, here is your daily report:\n"
+        for status in pending_tasks:
+            email_content += f"Task {status['status']} : {status['total']}\n"
+        send_mail("Pending tasks from Tasks Manager",email_content,"eg@eg.com",{report.email})
+        print(f"Email sent to {report.user.id}")
 
 @app.task
 def bg_jobs():
