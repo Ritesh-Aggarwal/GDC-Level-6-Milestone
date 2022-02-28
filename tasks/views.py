@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
@@ -6,6 +7,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.views.generic.list import ListView
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from tasks.forms import CustomLoginForm, CustomUserCreationForm, TaskCreateForm,ReportScheduleForm
 from tasks.models import Task,ReportSchedule
@@ -20,6 +22,14 @@ class UpdateReportSchedule(AuthorizeLoginUser,UpdateView):
     form_class = ReportScheduleForm
     template_name = "report_update.html"
     success_url = "/tasks"
+
+    def form_valid(self, form):
+        report_at =  form.cleaned_data.get("report_at")
+        if form['report_at'].initial != report_at:
+            self.object = form.save()
+            self.object.last_run_at = timezone.now() - timedelta(days=1)
+            self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_object(self):
         report_schedule = ReportSchedule.objects.get(user=self.request.user)
