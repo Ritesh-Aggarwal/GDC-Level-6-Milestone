@@ -1,9 +1,8 @@
 import time
 from datetime import datetime, timedelta
-
-from celery.schedules import crontab
 from celery.task import periodic_task
 from django.core.mail import send_mail
+from django.utils import timezone
 from task_manager.celery import app
 from django.db.models import Count
 from tasks.models import ReportSchedule, Task
@@ -27,7 +26,7 @@ def send_scheduled_emails():
         if report.email:
             send_mail("Pending tasks from Tasks Manager",email_content,"eg@eg.com",{report.email})
         print(f"Email sent to {report.user.id}")
-        report.last_run_at = datetime.now()
+        report.last_run_at = timezone.now()
         # report.next_run_at = report.report_at + timedelta(days=1)
         update_qs.append(report)
     # bulkupdate does not call save() hence last_modified feature of model can't be used.
