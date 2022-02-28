@@ -2,7 +2,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from datetime import datetime, timedelta
-
+from django.utils import timezone
 STATUS_CHOICES = (
     ("PENDING", "PENDING"),
     ("IN_PROGRESS", "IN_PROGRESS"),
@@ -56,13 +56,22 @@ class Task(models.Model):
         return self.title
 
 def default_start_time():
-    now = datetime.now()
+    # now = datetime.now()
+    now = timezone.now()
     start = now.replace(hour=20, minute=0, second=0, microsecond=0)
     return start
+
+def default_last_runtime():
+    # now = datetime.now() - timedelta(days=1)
+    now = default_start_time()
+    now -= timedelta(days=1)
+    return now 
 
 class ReportSchedule(models.Model):
     user = models.OneToOneField(User , on_delete=models.CASCADE, null=True,blank=True)
     report_at = models.TimeField(default=default_start_time)
+    last_run_at = models.DateTimeField(default=default_last_runtime)
+    # next_run_at = models.DateTimeField(default=default_start_time)
     email = models.EmailField(max_length=254)
 
     def __str__(self) :
